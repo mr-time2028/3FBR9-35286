@@ -1,3 +1,5 @@
+from drf_spectacular.utils import extend_schema
+
 from django.contrib.auth import get_user_model
 
 from rest_framework.views import APIView
@@ -9,6 +11,7 @@ from .serializers import RegistrationSerializer
 
 class RegistrationApiView(APIView):
 
+    @extend_schema(request=RegistrationSerializer)
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
