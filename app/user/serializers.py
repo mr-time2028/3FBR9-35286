@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+
 class RegistrationSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=100, min_length=4)
     password1 = serializers.CharField(max_length=30, min_length=8)
@@ -17,3 +18,8 @@ class RegistrationSerializer(serializers.Serializer):
             raise ValidationError({"detail": "Your passwords didn't match."}, code=status.HTTP_400_BAD_REQUEST)
 
         return attrs
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=100)
+    password = serializers.CharField(max_length=30)
