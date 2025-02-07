@@ -20,19 +20,19 @@ class RegistrationApiView(APIView):
     @extend_schema(request=RegistrationSerializer)
     def post(self, request):
         serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            username = serializer.data['username']
-            password1 = serializer.data['password1']
+        serializer.is_valid(raise_exception=True)
 
-            if not get_user_model().objects.filter(username=username).exists():
-                get_user_model().objects.create_user(
-                    username=username,
-                    password=password1,
-                    is_active=True
-                )
-                return Response({"success": "User registered successfully."}, status=status.HTTP_200_OK)
-            return Response({"detail": "This username already exists."}, status=status.HTTP_400_BAD_REQUEST)
-        return Response(serializer.errors)
+        username = serializer.data['username']
+        password1 = serializer.data['password1']
+
+        if not get_user_model().objects.filter(username=username).exists():
+            get_user_model().objects.create_user(
+                username=username,
+                password=password1,
+                is_active=True
+            )
+            return Response({"success": "User registered successfully."}, status=status.HTTP_200_OK)
+        return Response({"detail": "This username already exists."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginApiView(APIView):
@@ -41,27 +41,27 @@ class LoginApiView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
 
-        if serializer.is_valid(raise_exception=True):
-            username = serializer.data['username']
-            password = serializer.data['password']
+        serializer.is_valid(raise_exception=True)
 
-            try:
-                user = get_user_model().objects.get(username=username)
-                if not user.check_password(password):
-                    raise Exception()
-            except Exception:
-                return Response({"detail": "Incorrect username or password."}, status=status.HTTP_400_BAD_REQUEST)
+        username = serializer.data['username']
+        password = serializer.data['password']
 
-            if user.is_active:
-                refresh_token = RefreshToken.for_user(user)
-                access_token = refresh_token.access_token
+        try:
+            user = get_user_model().objects.get(username=username)
+            if not user.check_password(password):
+                raise Exception()
+        except Exception:
+            return Response({"detail": "Incorrect username or password."}, status=status.HTTP_400_BAD_REQUEST)
 
-                refresh_token.set_exp(lifetime=settings.ACCESS_TOKEN_LIFETIME)
-                access_token.set_exp(lifetime=settings.REFRESH_TOKEN_LIFETIME)
+        if user.is_active:
+            refresh_token = RefreshToken.for_user(user)
+            access_token = refresh_token.access_token
 
-                tokens = {"username": username, "refresh": str(refresh_token), "access": str(access_token)}
-                user.last_login = datetime.now()
-                user.save()
-                return Response(tokens, status=status.HTTP_200_OK)
-            return Response({"detail": "User is not confirmed."}, status=status.HTTP_403_FORBIDDEN)
-        return Response(serializer.errors)
+            refresh_token.set_exp(lifetime=settings.ACCESS_TOKEN_LIFETIME)
+            access_token.set_exp(lifetime=settings.REFRESH_TOKEN_LIFETIME)
+
+            tokens = {"username": username, "refresh": str(refresh_token), "access": str(access_token)}
+            user.last_login = datetime.now()
+            user.save()
+            return Response(tokens, status=status.HTTP_200_OK)
+        return Response({"detail": "User is not confirmed."}, status=status.HTTP_403_FORBIDDEN)

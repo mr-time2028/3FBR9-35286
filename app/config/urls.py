@@ -25,6 +25,7 @@ default_patterns = [
 
 app_patterns = [
     path('api/auth/', include('user.urls'), name='auth'),
+    path('api/booking/', include('booking.urls'), name='booking'),
 ]
 
 api_schema = [

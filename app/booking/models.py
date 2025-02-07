@@ -13,18 +13,18 @@ class Person(models.Model):
 
 class Table(models.Model):
     seats = models.PositiveIntegerField()
+    seat_cost = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.seats} seats"
+        return f"{self.seats} seats with {self.seat_cost} cost per seat"
 
 
 class Seat(models.Model):
     table = models.ForeignKey(Table, on_delete=models.CASCADE)
-    cost = models.PositiveIntegerField()
     is_reserved = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"seat {self.id} for table {self.table} with cost {self.cost}"
+        return f"seat {self.id} for table {self.table}"
 
 
 class Booking(models.Model):
