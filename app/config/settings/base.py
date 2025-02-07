@@ -40,6 +40,9 @@ DEFAULT_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_spectacular',
 ]
 
 LOCAL_APPS = [
@@ -141,5 +144,5 @@ MEDIA_ROOT = BASE_DIR / "media/"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# User authentiction default model
+# User authentication default model
 AUTH_USER_MODEL = 'user.User'
