@@ -20,6 +20,14 @@ A booking system for a restaurant.
     3. Run `docker-compose up --build`
 
 ## Usage
+Read at `/api/schema/swagger-ui/` path
+
+## Hints
+It would have been better if I had added many things to improve the project, but I didn't succeed due to lack of time.
+1 - two branches (main and develop)
+2 - write tests (I didn't write)
+3 - consider database locking system for reservation
+4 - consider some seed data for the database
 
 ## Contributing
 
